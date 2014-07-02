@@ -17,10 +17,10 @@ public:
 private:
     Ui::MainWindow *ui;
 public slots:
-    void FileEvent();
-    void PlayEvent();
-    void PauseEvent();
-    void StopEvent();
+    void FileEvent();//Открытие файла
+    void PlayEvent();//Воспроизведение
+    void PauseEvent();//Пауза
+    void StopEvent();//Остановка
     void VolumeEvent(int v);
     void FerEvent(int f);
     void PlaylistEvent();

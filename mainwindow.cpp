@@ -10,19 +10,23 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-       //Меню
+    //Меню
+       //Открытие файла
        QObject::connect(ui->Flchoose, SIGNAL(triggered()), this, SLOT(FileEvent()));
        QObject::connect(ui->Plchoose, SIGNAL(triggered()), this, SLOT(PlaylistEvent()));
-       //Кнопки 1 ур
+    //Кнопки 1 ур
+       //Воспроизведение
        QObject::connect(ui->Playb, SIGNAL(clicked()), this, SLOT(PlayEvent()));
+       //Пауза
        QObject::connect(ui->Pauseb, SIGNAL(clicked()), this, SLOT(PauseEvent()));
+       //Остановка
        QObject::connect(ui->Stopb, SIGNAL(clicked()), this, SLOT(StopEvent()));
-       //Кнопки 2 ур
+    //Кнопки 2 ур
        QObject::connect(ui->Prevb, SIGNAL(clicked()), this, SLOT(PrevEvent()));
        QObject::connect(ui->Nextb, SIGNAL(clicked()), this, SLOT(NextEvent()));
-       //Кнопки 3 ур
+    //Кнопки 3 ур
        QObject::connect(ui->Slowb, SIGNAL(clicked()), this, SLOT(SlowEvent()));
-       //Регуляторы
+    //Регуляторы
        QObject::connect(ui->Volumes, SIGNAL(valueChanged(int)),this, SLOT(VolumeEvent(int)));
        QObject::connect(ui->Fers, SIGNAL(valueChanged(int)),this, SLOT(FerEvent(int)));
 }
@@ -35,7 +39,7 @@ MainWindow::~MainWindow()
 QMediaPlayer *player = new QMediaPlayer;
 QMediaPlaylist *playlist = new QMediaPlaylist;
 
-void MainWindow::FileEvent()
+void MainWindow::FileEvent()//Открытие файла
 {
     QString  filepath = QFileDialog::getOpenFileName(this, tr("Open AudioFile"),"C:/Users/Admine/Music/Probe",tr("(*.mp3 *.wav *.ogg)"));
         QFile file(filepath);
@@ -49,18 +53,18 @@ void MainWindow::FileEvent()
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
-void MainWindow::PlayEvent()
+void MainWindow::PlayEvent()//Воспроизведение
 {
     player->play();
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
-void MainWindow::PauseEvent()
+void MainWindow::PauseEvent()//Пауза
 {
     player->pause();
 }
 
-void MainWindow::StopEvent()
+void MainWindow::StopEvent() //Остановка
 {
     player->stop();
 }
