@@ -25,9 +25,12 @@ MainWindow::MainWindow(QWidget *parent) :
        QObject::connect(ui->Prevb, SIGNAL(clicked()), this, SLOT(PrevEvent()));
        QObject::connect(ui->Nextb, SIGNAL(clicked()), this, SLOT(NextEvent()));
     //Кнопки 3 ур
+       //Замедление
        QObject::connect(ui->Slowb, SIGNAL(clicked()), this, SLOT(SlowEvent()));
     //Регуляторы
+       //Громкость
        QObject::connect(ui->Volumes, SIGNAL(valueChanged(int)),this, SLOT(VolumeEvent(int)));
+       //Частота
        QObject::connect(ui->Fers, SIGNAL(valueChanged(int)),this, SLOT(FerEvent(int)));
 }
 
@@ -64,12 +67,12 @@ void MainWindow::PauseEvent()//Пауза
     player->pause();
 }
 
-void MainWindow::StopEvent() //Остановка
+void MainWindow::StopEvent()//Остановка
 {
     player->stop();
 }
 
-void MainWindow::VolumeEvent(int v)
+void MainWindow::VolumeEvent(int v)//Громкость
 {
     ui->Volumen->display(v);
     player->setVolume(v);
@@ -103,17 +106,12 @@ void MainWindow::NextEvent()
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
-/*void MainWindow::ChangeCNEvent()
-{
-    ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
-}*/
-
-void MainWindow::SlowEvent()
+void MainWindow::SlowEvent()//Замедление
 {
     player->setPlaybackRate(0.5);
 }
 
-void MainWindow::FerEvent(int f)
+void MainWindow::FerEvent(int f)//Частота
 {
     ui->Fern->display(f);
     player->setPlaybackRate(f);

@@ -21,13 +21,12 @@ public slots:
     void PlayEvent();//Воспроизведение
     void PauseEvent();//Пауза
     void StopEvent();//Остановка
-    void VolumeEvent(int v);
-    void FerEvent(int f);
+    void SlowEvent();//Замедление (частота)
+    void VolumeEvent(int v);//Громкость
+    void FerEvent(int f);//Частота
     void PlaylistEvent();
     void PrevEvent();
     void NextEvent();
-    void SlowEvent();
-   // void ChangeCNEvent();
 };
 
 #endif // MAINWINDOW_H
