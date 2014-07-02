@@ -13,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //Меню
        //Открытие файла
        QObject::connect(ui->Flchoose, SIGNAL(triggered()), this, SLOT(FileEvent()));
+       //Добавление файла в плейлист
        QObject::connect(ui->Plchoose, SIGNAL(triggered()), this, SLOT(PlaylistEvent()));
     //Кнопки 1 ур
        //Воспроизведение
@@ -22,7 +23,9 @@ MainWindow::MainWindow(QWidget *parent) :
        //Остановка
        QObject::connect(ui->Stopb, SIGNAL(clicked()), this, SLOT(StopEvent()));
     //Кнопки 2 ур
+       //Предыдущий трек в плейлисте
        QObject::connect(ui->Prevb, SIGNAL(clicked()), this, SLOT(PrevEvent()));
+       //Следующий трек в плейлисте
        QObject::connect(ui->Nextb, SIGNAL(clicked()), this, SLOT(NextEvent()));
     //Кнопки 3 ур
        //Замедление
@@ -78,7 +81,7 @@ void MainWindow::VolumeEvent(int v)//Громкость
     player->setVolume(v);
 }
 
-void MainWindow::PlaylistEvent()
+void MainWindow::PlaylistEvent()//Добавление файла в плейлист
 {
     QString  filepath = QFileDialog::getOpenFileName(this, tr("Add file to Playlist"),"C:/Users/Admine/Music/Probe",tr("(*.mp3 *.wav *.ogg)"));
         QFile file(filepath);
@@ -94,13 +97,13 @@ void MainWindow::PlaylistEvent()
        ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
 }
 
-void MainWindow::PrevEvent()
+void MainWindow::PrevEvent()//Предыдущий трек в плейлисте
 {
     playlist->previous();
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
-void MainWindow::NextEvent()
+void MainWindow::NextEvent() //Следующий трек в плейлисте
 {
     playlist->next();
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());

@@ -24,9 +24,9 @@ public slots:
     void SlowEvent();//Замедление (частота)
     void VolumeEvent(int v);//Громкость
     void FerEvent(int f);//Частота
-    void PlaylistEvent();
-    void PrevEvent();
-    void NextEvent();
+    void PlaylistEvent();//Плейлист
+    void PrevEvent();//Предыдущий трек в плейлисте
+    void NextEvent();//Следующий трек в плейлисте
 };
 
 #endif // MAINWINDOW_H
