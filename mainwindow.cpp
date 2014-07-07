@@ -4,6 +4,7 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QDir>
+#include <QStringList>
 #include <QUrl>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -30,11 +31,16 @@ MainWindow::MainWindow(QWidget *parent) :
     //Кнопки 3 ур
        //Замедление
        QObject::connect(ui->Slowb, SIGNAL(clicked()), this, SLOT(SlowEvent()));
+       //Переход в плейлист
+       QObject::connect(ui->Jumpb, SIGNAL(clicked()), this, SLOT(JumpEvent()));
     //Регуляторы
        //Громкость
        QObject::connect(ui->Volumes, SIGNAL(valueChanged(int)),this, SLOT(VolumeEvent(int)));
        //Частота
        QObject::connect(ui->Fers, SIGNAL(valueChanged(int)),this, SLOT(FerEvent(int)));
+    //Список воспроизведения
+       //Выбор трека из плейлиста
+       QObject::connect(ui->listWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(WidgetEvent(QListWidgetItem*)));
 }
 
 MainWindow::~MainWindow()
@@ -47,7 +53,7 @@ QMediaPlaylist *playlist = new QMediaPlaylist;
 
 void MainWindow::FileEvent()//Открытие файла
 {
-    QString  filepath = QFileDialog::getOpenFileName(this, tr("Open AudioFile"),"C:/Users/Admine/Music/Probe",tr("(*.mp3 *.wav *.ogg)"));
+    QString  filepath = QFileDialog::getOpenFileName(this, tr("Open AudioFile"),"C:/Users/Public/Music/Sample Music",tr("(*.mp3 *.wav *.ogg)"));
         QFile file(filepath);
         if (!file.open(QIODevice::ReadOnly))
         {
@@ -81,31 +87,33 @@ void MainWindow::VolumeEvent(int v)//Громкость
     player->setVolume(v);
 }
 
-void MainWindow::PlaylistEvent()//Добавление файла в плейлист
+void MainWindow::PlaylistEvent()//Добавление файлов в плейлист
 {
-    QString  filepath = QFileDialog::getOpenFileName(this, tr("Add file to Playlist"),"C:/Users/Admine/Music/Probe",tr("(*.mp3 *.wav *.ogg)"));
-        QFile file(filepath);
-        if (!file.open(QIODevice::ReadOnly))
+    QStringList  filepath = QFileDialog::getOpenFileNames(this, tr("Add files to Playlist"),"C:/Users/Public/Music/Sample Music",tr("(*.mp3 *.wav *.ogg)"));
+    for (int i = 0; i < filepath.size(); ++i)
         {
-            return;
+        playlist->addMedia(QUrl::fromLocalFile(QDir::toNativeSeparators(filepath.at(i))));
+        ui->listWidget->addItem(filepath.at(i));
+        ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
         }
-        playlist->addMedia(QUrl::fromLocalFile(QDir::toNativeSeparators(filepath)));
         playlist->setCurrentIndex(1);
         player->setPlaylist(playlist);
         playlist->CurrentItemInLoop;
-       ui->listWidget->addItem(filepath);
-       ui->listWidget->setCurrentRow(playlist->currentIndex() != -1? playlist->currentIndex():0);
+        player->play();
+        ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
 void MainWindow::PrevEvent()//Предыдущий трек в плейлисте
 {
     playlist->previous();
+    player->play();
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
 void MainWindow::NextEvent() //Следующий трек в плейлисте
 {
     playlist->next();
+    player->play();
     ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
 
@@ -118,4 +126,27 @@ void MainWindow::FerEvent(int f)//Частота
 {
     ui->Fern->display(f);
     player->setPlaybackRate(f);
+}
+
+void MainWindow::JumpEvent()//Переход в плейлист
+{
+    player->setPlaylist(playlist);
+    player->play();
+    ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
+}
+
+void MainWindow::WidgetEvent(QListWidgetItem* g)//Выбор трека из плейлиста
+{
+ player->setMedia(QUrl::fromLocalFile(QDir::toNativeSeparators(g->text())));
+     /* playlist->setCurrentIndex(1);
+      for (int i=0;i<playlist->mediaCount();i++)
+      {
+          if (playlist->currentMedia().canonicalUrl().toString()==g->text())
+          {
+              break;
+          }
+          playlist->next();
+      }*/
+player->play();
+      ui->CurrentS->setText(player->currentMedia().canonicalUrl().toString());
 }
